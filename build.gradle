@@ -1,0 +1,74 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url = "http://files.minecraftforge.net/maven" }
+    }
+    dependencies {
+        classpath 'net.minecraftforge.gradle:ForgeGradle:2.2-SNAPSHOT'
+    }
+}
+
+apply plugin: 'net.minecraftforge.gradle.forge'
+
+def minecraft_version = "1.11.2"
+version = "1.0"
+group = "mod.akrivus.clones"
+archivesBaseName = "Clones"
+
+sourceCompatibility = targetCompatibility = "1.8"
+compileJava {
+    sourceCompatibility = targetCompatibility = "1.8"
+}
+minecraft {
+	replace "@mcversion", minecraft_version
+    replace "@version", project.version
+    replaceIn "Clones.java"
+    version = "1.11.2-13.20.0.2314"
+    runDir = "run"
+    mappings = "snapshot_20161220"
+}
+processResources {
+    inputs.property "mcversion", minecraft_version
+    inputs.property "version", project.version
+    from (sourceSets.main.resources.srcDirs) {
+        include 'mcmod.info'
+        expand 'version': project.version, 'mcversion': minecraft_version
+    }
+    from (sourceSets.main.resources.srcDirs) {
+        exclude 'mcmod.info'
+    }
+}
+configurations{
+	customCompile
+}
+dependencies {
+	customCompile fileTree(dir: 'lib', includes: ['*.jar'])
+	compile configurations.customCompile
+}
+jar {
+	from sourceSets.api.output
+	from ( configurations.customCompile.collect { it.isDirectory() ? it : zipTree(it)}) { exclude 'META-INF/**' }
+	appendix = minecraft_version
+}
+task jarApi(type: Jar){
+	from sourceSets.api.output
+	appendix = minecraft_version
+	classifier = "api"
+}
+task jarDev(type: Jar){
+	from sourceSets.main.output
+	from sourceSets.api.output
+	appendix = minecraft_version
+	classifier = "dev"
+}
+task jarSrc(type: Jar){
+	from sourceSets.main.allSource
+	from sourceSets.api.allSource
+	appendix = minecraft_version
+	classifier = "src"
+}
+artifacts{
+	archives jarApi
+	archives jarDev
+	archives jarSrc
+}

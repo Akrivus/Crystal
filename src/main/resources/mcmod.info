@@ -1,0 +1,16 @@
+[
+	{
+		"modid": "clones",
+		"name": "Attack Of The Clones",
+		"description": "Clones are personal assistants that you create. Equipped with natural language processing and a preset of customized tasks, Clones are extremely useful and fun for both the tech-spirited and tech-inept.",
+		"version": "${version}",
+		"mcversion": "${mcversion}",
+		"url": "",
+		"updateUrl": "",
+		"authorList": ["Akrivus"],
+		"credits": "Akrivus designed the systems, several people designed the idea.",
+		"logoFile": "",
+		"screenshots": [],
+		"dependencies": []
+	}
+]
